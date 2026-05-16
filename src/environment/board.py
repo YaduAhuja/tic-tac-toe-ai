@@ -26,6 +26,9 @@ class Board:
     def legalMoves(self) -> list[int]:
         return [i for i in range(len(self.cells)) if self.cells[i] == self.EMPTY]
     
+    def state(self) -> list[int]:
+        return self.cells
+    
     def is_full(self) -> bool:
         return self.EMPTY not in self.cells
     

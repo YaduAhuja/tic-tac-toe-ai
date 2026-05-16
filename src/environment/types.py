@@ -7,3 +7,10 @@ class Player(Enum):
     # @property
     # def symbol(self):
     #     return self.name
+
+
+class Event(Enum):
+    MOVE = "move"
+    WIN = "win"
+    LOSE = "lose"
+    DRAW = "draw"

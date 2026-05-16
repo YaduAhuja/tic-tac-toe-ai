@@ -1,5 +1,5 @@
 from agents import Agent
-from environment import Board, Player
+from environment import Board, Player, Event
 
 class Game():
     def __init__(self, xAgent: Agent, yAgent: Agent, boardSize: int = 3) -> None:
@@ -7,7 +7,7 @@ class Game():
         self.yAgent = yAgent
 
         self.board = Board(boardSize)
-        self.currentPlayer = Player.X
+        self.currentPlayer = Player.O
     
     def _currentAgent(self) -> Agent:
         if self.currentPlayer == Player.X:
@@ -16,19 +16,31 @@ class Game():
 
     def step(self):
         agent = self._currentAgent()
-        move = agent.selectMove(self.board)
+        move = agent.selectMove(self.board, self.currentPlayer)
         self.board.place(move, self.currentPlayer)
-        self.currentPlayer = Player.O if self.currentPlayer == Player.X else Player.X
+        agent.onEvent(Event.MOVE)
 
     
-    def play(self):
+    def play(self) -> Player | None:
         while not self.board.isTerminal():
-            self.board.render()
+            self.currentPlayer = Player.O if self.currentPlayer == Player.X else Player.X
+            # self.board.render()
             self.step()
-
-        self.board.render()
+            
+        # self.board.render()
         winner = self.board.winner()
         if winner is None:
-            print("Draw")
+            self.xAgent.onEvent(Event.DRAW)
+            self.yAgent.onEvent(Event.DRAW)
+            # print("Draw")
         else:
-            print(f"Winner: {winner.name}")
+            winnerAgent = self.yAgent
+            loserAgent = self.xAgent
+            if (winner == Player.X):
+                winnerAgent = self.xAgent
+                loserAgent = self.yAgent
+
+            winnerAgent.onEvent(Event.WIN)
+            loserAgent.onEvent(Event.LOSE)
+
+        return winner
