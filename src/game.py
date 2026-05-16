@@ -2,11 +2,11 @@ from agents import Agent
 from environment import Board, Player
 
 class Game():
-    def __init__(self, xAgent: Agent, yAgent: Agent) -> None:
+    def __init__(self, xAgent: Agent, yAgent: Agent, boardSize: int = 3) -> None:
         self.xAgent = xAgent
         self.yAgent = yAgent
 
-        self.board = Board()
+        self.board = Board(boardSize)
         self.currentPlayer = Player.X
     
     def _currentAgent(self) -> Agent:
